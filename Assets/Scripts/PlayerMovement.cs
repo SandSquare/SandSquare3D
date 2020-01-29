@@ -53,6 +53,7 @@ namespace Game
 
         //private GameInput gameInput;
         private CharacterController characterController;
+        private Player player;
 
         #endregion
 
@@ -62,6 +63,7 @@ namespace Game
         {
             //gameInput = FindObjectOfType<GameInput>();
             characterController = GetComponent<CharacterController>();
+            player = GetComponent<Player>();
         }
 
         private void Update()
@@ -95,7 +97,7 @@ namespace Game
                 // Apply a bit of force to help keep us grounded
                 if (characterController.isGrounded) velocity.y = -keepOnGroundForce;
 
-                if (Input.GetButton("Jump"))
+                if (player.isJumping)
                 {
                     velocity.y = jumpSpeed;
                 }
@@ -139,8 +141,7 @@ namespace Game
 
         private float GetInput()
         {
-            input.x = Input.GetAxisRaw("Horizontal");
-            input.y = Input.GetAxisRaw("Vertical");
+            input = player.GetInput();
 
             if (input.sqrMagnitude > 1)
                 input.Normalize();
