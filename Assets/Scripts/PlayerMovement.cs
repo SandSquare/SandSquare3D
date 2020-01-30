@@ -7,23 +7,23 @@ namespace Game
     {
         #region Unity properties
 
-        [Range(0, 50)]
-        public float walkSpeed = 4.0f;
+        [SerializeField, Range(0, 50)]
+        private float walkSpeed = 4.0f;
 
-        [Range(0, 50)]
-        public float runSpeed = 8.0f;
+        [SerializeField, Range(0, 50)]
+        private float runSpeed = 8.0f;
 
-        [Range(0, 50)]
-        public float jumpSpeed = 8.0f;
+        [SerializeField, Range(0, 50)]
+        private float jumpSpeed = 8.0f;
 
-        [Range(0, 20)]
-        public float gravityMultiplier = 2f;
+        [SerializeField, Range(0, 20)]
+        private float gravityMultiplier = 2f;
 
-        [Range(0, 20)]
-        public float keepOnGroundForce = 2f;
+        [SerializeField, Range(0, 20)]
+        private float keepOnGroundForce = 2f;
 
-        [Range(0, 1f)]
-        public float groundDistanceTolerance = 0.1f;
+        [SerializeField, Range(0, 1f)]
+        private float groundDistanceTolerance = 0.1f;
 
         #endregion
 
@@ -47,6 +47,8 @@ namespace Game
 
         private Vector3 rayPositionOffset = Vector3.zero;
 
+        private Vector3 targetRotation;
+
         #endregion
 
         #region Components
@@ -69,7 +71,7 @@ namespace Game
             var speed = GetInput();
 
             var tr = transform;
-            var targetMovement = tr.forward * input.y + tr.right * input.x;
+            var targetMovement = Vector3.forward * input.y + Vector3.right * input.x;
 
             rayPositionOffset.y = characterController.height / 2f;
 
@@ -111,10 +113,18 @@ namespace Game
                 }
             }
 
+            
+
             // Apply constant gravity to also help keep us grounded
             velocity += gravityMultiplier * Time.deltaTime * Physics.gravity;
 
             collisionFlags = characterController.Move(velocity * Time.deltaTime);
+
+            targetRotation.x = transform.position.x + velocity.x * 100;
+            targetRotation.z = transform.position.z + velocity.z * 100;
+            targetRotation.y = transform.position.y;
+
+            transform.LookAt(targetRotation);
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
