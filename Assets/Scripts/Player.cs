@@ -10,6 +10,8 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     public bool isJumping = false;
     public bool isPickedUp = false;
 
+    InputAction moveInput { get;  }
+    
     private void Awake()
     {
         controls = new PlayerControls();
@@ -29,6 +31,7 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void OnMove(InputAction.CallbackContext context)
     {
+
     }
 
 
@@ -67,8 +70,10 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
+        
         if (context.phase == InputActionPhase.Performed)
         {
+            
             isPickedUp = true;
         }
         else if (context.phase == InputActionPhase.Canceled)
