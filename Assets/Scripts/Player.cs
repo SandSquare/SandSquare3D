@@ -12,6 +12,7 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     public bool isColliding;
     public bool isJumping = false;
     public bool isPickedUp = false;
+    private bool handsEmpty = true;
 
     public Vector2 MoveInput
     {
@@ -95,13 +96,15 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed)
+        if (context.phase == InputActionPhase.Performed && handsEmpty)
         {
             isPickedUp = true;
+            handsEmpty = false;
         }
-        else if (context.phase == InputActionPhase.Canceled)
+        else if (context.phase == InputActionPhase.Performed && !handsEmpty)
         {
             isPickedUp = false;
+            handsEmpty = true;
         }
 
     }
