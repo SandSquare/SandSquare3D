@@ -45,6 +45,9 @@ namespace Game
         private CollisionFlags collisionFlags;
         private bool isWalking;
 
+        //private PlayerControls playerInput;
+        private Player inputs;
+
         private Vector3 rayPositionOffset = Vector3.zero;
 
         private Vector3 targetRotation;
@@ -55,7 +58,6 @@ namespace Game
 
         //private GameInput gameInput;
         private CharacterController characterController;
-        private Player player;
 
         #endregion
 
@@ -65,12 +67,13 @@ namespace Game
         {
             //gameInput = FindObjectOfType<GameInput>();
             characterController = GetComponent<CharacterController>();
-            player = GetComponent<Player>();
+
+            inputs = GetComponent<Player>();
         }
 
         private void Update()
         {
-            var speed = GetInput();
+            float speed = GetInput();
 
             var tr = transform;
             var targetMovement = Vector3.forward * input.y + Vector3.right * input.x;
@@ -81,6 +84,7 @@ namespace Game
             var didHit = Physics.SphereCast(tr.position + rayPositionOffset,
                 characterController.radius * 0.8f, Vector3.down, out var hit,
                 rayPositionOffset.y + groundDistanceTolerance, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+
             var hitAngle = Vector3.Angle(Vector3.up, hit.normal);
 
             // Adjust direction based on ground slope, but only if the slope isn't too steep
@@ -99,7 +103,7 @@ namespace Game
                 // Apply a bit of force to help keep us grounded
                 if (characterController.isGrounded) velocity.y = -keepOnGroundForce;
 
-                if (player.isJumping)
+                if (/*Input.GetButton("Jump") ||*/ inputs.JumpInput.triggered)
                 {
                     velocity.y = jumpSpeed;
                 }
@@ -108,14 +112,13 @@ namespace Game
             {
                 IsGrounded = false;
 
-                if (velocity.sqrMagnitude < runSpeed * runSpeed)
+
+                //if (velocity.sqrMagnitude < runSpeed * runSpeed)
                 {
                     velocity.x += (targetMovement.x * speed) * Time.deltaTime;
                     velocity.z += (targetMovement.z * speed) * Time.deltaTime;
                 }
             }
-
-            
 
             // Apply constant gravity to also help keep us grounded
             velocity += gravityMultiplier * Time.deltaTime * Physics.gravity;
@@ -126,10 +129,11 @@ namespace Game
             targetRotation.z = transform.position.z + velocity.z * 100;
             targetRotation.y = transform.position.y;
 
-            Quaternion toRotation = Quaternion.LookRotation(targetRotation - transform.position);
-            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 10f * Time.deltaTime);
-
-            //transform.LookAt(targetRotation);
+            if(input != Vector2.zero)
+            {
+                Quaternion toRotation = Quaternion.LookRotation(targetRotation - transform.position);
+                transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 10f * Time.deltaTime);
+            }
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -154,7 +158,8 @@ namespace Game
 
         private float GetInput()
         {
-            input = player.GetInput();
+            input.x = inputs.MoveInput.x;
+            input.y = inputs.MoveInput.y;
 
             if (input.sqrMagnitude > 1)
                 input.Normalize();
