@@ -11,8 +11,10 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     public GameObject tempParent;
     public bool isColliding;
     public bool isJumping = false;
-    public bool isPickedUp = false;
+    public bool isPickedUp;
     private bool handsEmpty = true;
+
+    private float throwForce = 300f;
 
     public Vector2 MoveInput
     {
@@ -37,13 +39,15 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     }
     private void Update()
     {
-        if (isPickedUp)
+        if (!handsEmpty)
         {
             PickThrowable();
+            isPickedUp = true;
         }
-        else if (!isPickedUp)
+        else if (isPickedUp)
         {
             Throw();
+            isPickedUp = false;
         }
     }
 
@@ -98,14 +102,13 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     {
         if (context.phase == InputActionPhase.Performed && handsEmpty && isColliding)
         {
-            isPickedUp = true;
             handsEmpty = false;
         }
         else if (context.phase == InputActionPhase.Performed && !handsEmpty)
         {
-            isPickedUp = false;
             handsEmpty = true;
         }
+        
 
     }
 
@@ -113,6 +116,8 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     {
         if (isColliding)
         {
+            pickUpObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            pickUpObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             pickUpObject.transform.position = Hands.transform.position;
             pickUpObject.transform.rotation = Hands.transform.rotation;
             pickUpObject.transform.parent = tempParent.transform;
@@ -126,5 +131,8 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
         pickUpObject.transform.parent = null;
         pickUpObject.GetComponent<Rigidbody>().useGravity = true;
         isPickedUp = false;
+        isColliding = false;
+        pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForce);
+        pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForce/2));
     }
 }
