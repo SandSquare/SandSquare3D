@@ -57,6 +57,7 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
         controls.Enable();
     }
 
+<<<<<<< HEAD
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "Throwable")
@@ -75,6 +76,8 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     //    //Mover.Move(moveInput);
     //}
 
+=======
+>>>>>>> af2e0c22a0d21539d5f16df569e8b06c8d7a662b
     public Vector2 GetInput()
     {
         Vector2 moveInput = controls.Player.Move.ReadValue<Vector2>();
