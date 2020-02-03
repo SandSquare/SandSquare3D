@@ -124,7 +124,10 @@ namespace Game
             targetRotation.z = transform.position.z + velocity.z * 100;
             targetRotation.y = transform.position.y;
 
-            transform.LookAt(targetRotation);
+            Quaternion toRotation = Quaternion.LookRotation(targetRotation - transform.position);
+            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 10f * Time.deltaTime);
+
+            //transform.LookAt(targetRotation);
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
