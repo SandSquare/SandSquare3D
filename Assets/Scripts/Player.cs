@@ -96,7 +96,7 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed && handsEmpty)
+        if (context.phase == InputActionPhase.Performed && handsEmpty && isColliding)
         {
             isPickedUp = true;
             handsEmpty = false;

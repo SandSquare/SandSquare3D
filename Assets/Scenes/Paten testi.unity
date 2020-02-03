@@ -141,6 +141,7 @@ MonoBehaviour:
   pickUpObject: {fileID: 1576191628}
   Hands: {fileID: 1380716659}
   tempParent: {fileID: 1380716658}
+  isColliding: 0
   isJumping: 0
   isPickedUp: 0
 --- !u!1 &705507993
@@ -473,8 +474,8 @@ GameObject:
   - component: {fileID: 1576191625}
   - component: {fileID: 1576191624}
   - component: {fileID: 1576191628}
-  - component: {fileID: 1576191629}
   - component: {fileID: 1576191631}
+  - component: {fileID: 1576191629}
   m_Layer: 0
   m_Name: Throwable
   m_TagString: Untagged
@@ -567,8 +568,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df02f72228976be4980bdfecbcd7f0a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hands: {fileID: 1380716659}
-  tempParent: {fileID: 1380716658}
   isColliding: 0
 --- !u!54 &1576191629
 Rigidbody:
