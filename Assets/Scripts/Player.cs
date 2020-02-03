@@ -7,6 +7,9 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
 {
     private PlayerControls controls;
     public PickUp pickUpObject;
+    public Transform Hands;
+    public GameObject tempParent;
+    public bool isColliding;
     public bool isJumping = false;
     public bool isPickedUp = false;
 
@@ -19,11 +22,11 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     {
         if (isPickedUp)
         {
-            pickUpObject.PickThrowable();
+            PickThrowable();
         }
         else if (!isPickedUp)
         {
-            pickUpObject.Throw();
+            Throw();
         }
     }
 
@@ -36,6 +39,15 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     void Start()
     {
         controls.Enable();
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "Throwable")
+        {
+            isColliding = true;
+        }
+
     }
 
     // Update is called once per frame
@@ -75,5 +87,25 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
         {
             isPickedUp = false;
         }
+
+    }
+
+    public void PickThrowable()
+    {
+        if (isColliding)
+        {
+            pickUpObject.transform.position = Hands.transform.position;
+            pickUpObject.transform.rotation = Hands.transform.rotation;
+            pickUpObject.transform.parent = tempParent.transform;
+            isPickedUp = true;
+            isColliding = false;
+        }
+    }
+
+    public void Throw()
+    {
+        pickUpObject.transform.parent = null;
+        pickUpObject.GetComponent<Rigidbody>().useGravity = true;
+        isPickedUp = false;
     }
 }
