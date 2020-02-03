@@ -6,8 +6,9 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour, PlayerControls.IPlayerActions
 {
     private PlayerControls controls;
-
+    public PickUp pickUpObject;
     public bool isJumping = false;
+    public bool isPickedUp = false;
 
     public Vector2 MoveInput
     {
@@ -29,6 +30,17 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     {
         controls = new PlayerControls();
         controls.Player.SetCallbacks(this);
+    }
+    private void Update()
+    {
+        if (isPickedUp)
+        {
+            pickUpObject.PickThrowable();
+        }
+        else if (!isPickedUp)
+        {
+            pickUpObject.Throw();
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -61,5 +73,15 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
         }
     }
 
-
+    public void OnPickUp(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            isPickedUp = true;
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            isPickedUp = false;
+        }
+    }
 }
