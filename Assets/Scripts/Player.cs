@@ -10,8 +10,22 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
     public bool isJumping = false;
     public bool isPickedUp = false;
 
-    InputAction moveInput { get;  }
-    
+    public Vector2 MoveInput
+    {
+        get
+        {
+            return controls.Player.Move.ReadValue<Vector2>();
+        } 
+    }
+
+    public InputAction JumpInput
+    {
+        get
+        {
+            return controls.Player.Jump;
+        }
+    }
+
     private void Awake()
     {
         controls = new PlayerControls();
@@ -41,15 +55,6 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
         controls.Enable();
     }
 
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    Vector2 moveInput = controls.Player.Move.ReadValue<Vector2>();
-    //    transform.position += new Vector3(moveInput.x, 0, moveInput.y);
-    //    //GetComponent<Game.PlayerMovement>().GetInput(moveInput);
-    //    //Mover.Move(moveInput);
-    //}
-
     public Vector2 GetInput()
     {
         Vector2 moveInput = controls.Player.Move.ReadValue<Vector2>();
@@ -70,10 +75,8 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
-        
         if (context.phase == InputActionPhase.Performed)
         {
-            
             isPickedUp = true;
         }
         else if (context.phase == InputActionPhase.Canceled)
