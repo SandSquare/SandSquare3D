@@ -45,8 +45,7 @@ namespace Game
         private CollisionFlags collisionFlags;
         private bool isWalking;
 
-        //private PlayerControls playerInput;
-        private Player inputs;
+        private PlayerInput inputs;
 
         private Vector3 rayPositionOffset = Vector3.zero;
 
@@ -68,7 +67,7 @@ namespace Game
             //gameInput = FindObjectOfType<GameInput>();
             characterController = GetComponent<CharacterController>();
 
-            inputs = GetComponent<Player>();
+            inputs = GetComponent<PlayerInput>();
         }
 
         private void Update()
