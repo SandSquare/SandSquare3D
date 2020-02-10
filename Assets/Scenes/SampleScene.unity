@@ -193,7 +193,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 2.8131285e+20, z: 7.2701056e+31, w: 2.7088265e+23}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -229,7 +229,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152ae0fb602c4ac44a3dc6a8f5199af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Hands: {fileID: 0}
+  tempParent: {fileID: 0}
+  isColliding: 0
   isJumping: 0
+  isPickedUp: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,6 +476,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986460251037607379, guid: 71052dcbb98a8614388e51e4783b3475,
+        type: 3}
+      propertyPath: gravityMultiplier
+      value: 12.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986460251037607379, guid: 71052dcbb98a8614388e51e4783b3475,
+        type: 3}
+      propertyPath: airControlSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986460251037607379, guid: 71052dcbb98a8614388e51e4783b3475,
+        type: 3}
+      propertyPath: jumpSpeed
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6986460251037607382, guid: 71052dcbb98a8614388e51e4783b3475,
         type: 3}

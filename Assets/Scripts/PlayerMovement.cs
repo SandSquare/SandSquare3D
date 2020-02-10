@@ -14,6 +14,9 @@ namespace Game
         private float runSpeed = 8.0f;
 
         [SerializeField, Range(0, 50)]
+        private float airControlSpeed = 6.0f;
+
+        [SerializeField, Range(0, 50)]
         private float jumpSpeed = 8.0f;
 
         [SerializeField, Range(0, 20)]
@@ -115,9 +118,9 @@ namespace Game
             {
                 IsGrounded = false;
 
-                Vector3 airVelocity = new Vector3(inputs.MoveInput.x, transform.position.y, inputs.MoveInput.y) * 0.8f;
+                Vector3 airVelocity = new Vector3(inputs.MoveInput.x, transform.position.y, inputs.MoveInput.y) * airControlSpeed;
 
-                velocity = Vector3.Lerp(velocity, airVelocity, 0.9f);
+                velocity = Vector3.Lerp(targetMovement, airVelocity, 0.3f);
 
                 ////if (velocity.sqrMagnitude < runSpeed * runSpeed)
                 //velocity.x += (targetMovement.x * speed) * Time.deltaTime;
