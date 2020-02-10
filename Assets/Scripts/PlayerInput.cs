@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInput : PlayerControls.IPlayerActions
+public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
 {
     private PlayerControls controls;
+
     public Vector2 MoveInput
     {
         get
@@ -30,18 +31,25 @@ public class PlayerInput : PlayerControls.IPlayerActions
         }
     }
 
+    private void Awake()
+    {
+        controls = new PlayerControls();        
+        controls.Enable();
+        controls.Player.SetCallbacks(this);
+    }
+
     public void OnJump(InputAction.CallbackContext context)
     {
-        throw new System.NotImplementedException();
+
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        throw new System.NotImplementedException();
+
     }
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
-        throw new System.NotImplementedException();
+
     }
 }
