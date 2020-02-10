@@ -50,6 +50,6 @@ public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
-
+        
     }
 }

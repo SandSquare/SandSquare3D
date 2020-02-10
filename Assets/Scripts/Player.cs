@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
         {
             isColliding = true;
             collidingObject = other.gameObject;
-        }    
+        }
     }
 
     //public void OnPickUp(InputAction.CallbackContext context)
@@ -75,12 +75,13 @@ public class Player : MonoBehaviour
             pickUpObject.transform.parent = tempParent.transform;
             isPickedUp = true;
             isColliding = false;
+            EventManager.TriggerEvent("test");
         }
     }
 
     public void Throw()
     {
-        if(pickUpObject != null)
+        if (pickUpObject != null)
         {
             pickUpObject.transform.parent = null;
             pickUpObject.GetComponent<Rigidbody>().useGravity = true;
