@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour, PlayerControls.IPlayerActions
+public class Player : MonoBehaviour
 {
-    private PlayerControls controls;
-    public PickUp pickUpObject;
+    private PlayerInput inputs;
+    private GameObject pickUpObject;
+    private GameObject collidingObject;
     public Transform Hands;
     public GameObject tempParent;
     public bool isColliding;
@@ -16,106 +17,57 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
 
     private float throwForce = 300f;
 
-    public Vector2 MoveInput
-    {
-        get
-        {
-            return controls.Player.Move.ReadValue<Vector2>();
-        } 
-    }
-
-    public InputAction JumpInput
-    {
-        get
-        {
-            return controls.Player.Jump;
-        }
-    }
-
     private void Awake()
     {
-        controls = new PlayerControls();
-        controls.Player.SetCallbacks(this);
+        inputs = GetComponent<PlayerInput>();
     }
     private void Update()
     {
-        if (!handsEmpty)
+        if (inputs.ActionInput.triggered)
         {
-            PickThrowable();
-            isPickedUp = true;
+            if (handsEmpty && isColliding)
+            {
+                PickThrowable();
+                isPickedUp = true;
+                handsEmpty = false;
+            }
+            else if (isPickedUp && !handsEmpty)
+            {
+                Throw();
+                isPickedUp = false;
+                handsEmpty = true;
+            }
+
+            Debug.Log($"handsempty {handsEmpty} - ispickedup {isPickedUp}");
         }
-        else if (isPickedUp)
-        {
-            Throw();
-            isPickedUp = false;
-        }
     }
 
-    public void OnMove(InputAction.CallbackContext context)
+    void OnTriggerStay(Collider other)
     {
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        controls.Enable();
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.name == "Throwable")
+        if (other.gameObject.tag == "Throwable")
         {
             isColliding = true;
-        }
-
+            collidingObject = other.gameObject;
+        }    
     }
 
-    // Update is called once per frame
-    //void Update()
+    //public void OnPickUp(InputAction.CallbackContext context)
     //{
-    //    Vector2 moveInput = controls.Player.Move.ReadValue<Vector2>();
-    //    transform.position += new Vector3(moveInput.x, 0, moveInput.y);
-    //    //GetComponent<Game.PlayerMovement>().GetInput(moveInput);
-    //    //Mover.Move(moveInput);
-    //}
-
-    public Vector2 GetInput()
-    {
-        Vector2 moveInput = controls.Player.Move.ReadValue<Vector2>();
-        return moveInput;
-    }
-
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed)
-        {
-            isJumping = true;
-        }
-        else if (context.phase == InputActionPhase.Canceled)
-        {
-            isJumping = false;
-        }
-    }
-
-    public void OnPickUp(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed && handsEmpty && isColliding)
-        {
-            handsEmpty = false;
-        }
-        else if (context.phase == InputActionPhase.Performed && !handsEmpty)
-        {
-            handsEmpty = true;
-        }
-        
-
-    }
+    //    if (context.phase == InputActionPhase.Performed && handsEmpty && isColliding)
+    //    {
+    //        handsEmpty = false;
+    //    }
+    //    else if (context.phase == InputActionPhase.Performed && !handsEmpty)
+    //    {
+    //        handsEmpty = true;
+    //    }
+    //}w
 
     public void PickThrowable()
     {
         if (isColliding)
         {
+            pickUpObject = collidingObject;
             pickUpObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             pickUpObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             pickUpObject.transform.position = Hands.transform.position;
@@ -128,11 +80,14 @@ public class Player : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void Throw()
     {
-        pickUpObject.transform.parent = null;
-        pickUpObject.GetComponent<Rigidbody>().useGravity = true;
-        isPickedUp = false;
-        isColliding = false;
-        pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForce);
-        pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForce/2));
+        if(pickUpObject != null)
+        {
+            pickUpObject.transform.parent = null;
+            pickUpObject.GetComponent<Rigidbody>().useGravity = true;
+            isPickedUp = false;
+            isColliding = false;
+            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForce);
+            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForce / 2));
+        }
     }
 }
