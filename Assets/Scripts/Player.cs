@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     {
         inputs = GetComponent<PlayerInput>();
     }
+
     private void Update()
     {
         if (inputs.ActionInput.triggered)
@@ -40,6 +41,24 @@ public class Player : MonoBehaviour
 
             Debug.Log($"handsempty {handsEmpty} - ispickedup {isPickedUp}");
         }
+    }
+
+    public void HandlePickUp()
+    {
+        if (handsEmpty && isColliding)
+        {
+            PickThrowable();
+            isPickedUp = true;
+            handsEmpty = false;
+        }
+        else if (isPickedUp && !handsEmpty)
+        {
+            Throw();
+            isPickedUp = false;
+            handsEmpty = true;
+        }
+
+        Debug.Log($"handsempty {handsEmpty} - ispickedup {isPickedUp}");
     }
 
     void OnTriggerStay(Collider other)
@@ -75,7 +94,7 @@ public class Player : MonoBehaviour
             pickUpObject.transform.parent = tempParent.transform;
             isPickedUp = true;
             isColliding = false;
-            EventManager.TriggerEvent("test");
+            EventManager.TriggerEvent("Pickup");
         }
     }
 

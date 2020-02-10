@@ -5,39 +5,26 @@ using System.Collections;
 public class EventTest : MonoBehaviour
 {
 
-    private UnityAction someListener;
+    private UnityAction pickupDelegate;
 
     void Awake()
     {
-        someListener = new UnityAction(SomeFunction);
+        pickupDelegate += PickUpMessage;
     }
 
     void OnEnable()
     {
-        EventManager.StartListening("test", someListener);
-        EventManager.StartListening("Spawn", SomeOtherFunction);
-        EventManager.StartListening("Destroy", SomeThirdFunction);
+        EventManager.StartListening("Pickup", pickupDelegate);
     }
 
     void OnDisable()
     {
-        EventManager.StopListening("test", someListener);
-        EventManager.StopListening("Spawn", SomeOtherFunction);
-        EventManager.StopListening("Destroy", SomeThirdFunction);
+        EventManager.StopListening("Pickup", pickupDelegate);
     }
 
-    void SomeFunction()
+    void PickUpMessage()
     {
-        Debug.Log("Some Function was called!");
+        Debug.Log("Object picked up!");
     }
 
-    void SomeOtherFunction()
-    {
-        Debug.Log("Some Other Function was called!");
-    }
-
-    void SomeThirdFunction()
-    {
-        Debug.Log("Some Third Function was called!");
-    }
 }
