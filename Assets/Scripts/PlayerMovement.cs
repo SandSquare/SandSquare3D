@@ -14,6 +14,9 @@ namespace Game
         private float runSpeed = 8.0f;
 
         [SerializeField, Range(0, 50)]
+        private float airControlSpeed = 6.0f;
+
+        [SerializeField, Range(0, 50)]
         private float jumpSpeed = 8.0f;
 
         [SerializeField, Range(0, 20)]
@@ -74,23 +77,27 @@ namespace Game
         {
             float speed = GetInput();
 
-            var tr = transform;
-            var targetMovement = Vector3.forward * input.y + Vector3.right * input.x;
+            Transform tr = transform;
+            Vector3 targetMovement = Vector3.forward * input.y + Vector3.right * input.x;
 
             rayPositionOffset.y = characterController.height / 2f;
 
             // Check if there's something solid close below us
-            var didHit = Physics.SphereCast(tr.position + rayPositionOffset,
+            bool didHit = Physics.SphereCast(tr.position + rayPositionOffset,
                 characterController.radius * 0.8f, Vector3.down, out var hit,
                 rayPositionOffset.y + groundDistanceTolerance, Physics.AllLayers, QueryTriggerInteraction.Ignore);
 
-            var hitAngle = Vector3.Angle(Vector3.up, hit.normal);
+            float hitAngle = Vector3.Angle(Vector3.up, hit.normal);
 
             // Adjust direction based on ground slope, but only if the slope isn't too steep
             if (hitAngle < characterController.slopeLimit)
+            {
                 targetMovement = Vector3.ProjectOnPlane(targetMovement, hit.normal).normalized;
+            }
             else
+            {
                 targetMovement.Normalize();
+            }               
 
             // Apply movement only when on (or near) ground and player isn't moving upwards
             if ((characterController.isGrounded || didHit) && velocity.y <= 0f)
@@ -102,7 +109,7 @@ namespace Game
                 // Apply a bit of force to help keep us grounded
                 if (characterController.isGrounded) velocity.y = -keepOnGroundForce;
 
-                if (/*Input.GetButton("Jump") ||*/ inputs.JumpInput.triggered)
+                if (inputs.JumpInput.triggered)
                 {
                     velocity.y = jumpSpeed;
                 }
@@ -111,12 +118,13 @@ namespace Game
             {
                 IsGrounded = false;
 
+                Vector3 airVelocity = new Vector3(inputs.MoveInput.x, transform.position.y, inputs.MoveInput.y) * airControlSpeed;
 
-                //if (velocity.sqrMagnitude < runSpeed * runSpeed)
-                {
-                    velocity.x += (targetMovement.x * speed) * Time.deltaTime;
-                    velocity.z += (targetMovement.z * speed) * Time.deltaTime;
-                }
+                velocity = Vector3.Lerp(targetMovement, airVelocity, 0.3f);
+
+                ////if (velocity.sqrMagnitude < runSpeed * runSpeed)
+                //velocity.x += (targetMovement.x * speed) * Time.deltaTime;
+                //velocity.z += (targetMovement.z * speed) * Time.deltaTime;
             }
 
             // Apply constant gravity to also help keep us grounded

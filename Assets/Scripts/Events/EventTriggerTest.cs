@@ -4,6 +4,11 @@ using System.Collections;
 public class EventTriggerTest : MonoBehaviour
 {
 
+    private void Awake()
+    {
+        
+    }
+
     void Update()
     {
         if (Input.GetKeyDown("q"))

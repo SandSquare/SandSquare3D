@@ -38,6 +38,11 @@ public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
         controls.Player.SetCallbacks(this);
     }
 
+    private void OnEnable()
+    {
+        //controls.Player.PickUp.performed += OnPickUp;
+    }
+
     public void OnJump(InputAction.CallbackContext context)
     {
 
@@ -50,6 +55,6 @@ public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
-
+        //GetComponent<Player>().HandlePickUp();
     }
 }
