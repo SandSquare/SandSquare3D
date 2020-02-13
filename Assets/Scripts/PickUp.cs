@@ -7,6 +7,7 @@ public class PickUp : MonoBehaviour
 {
     //public List<GameObject> currentHitObjects;
     public GameObject currentHitObject;
+    private GameObject pickUpPlayer;
 
     public bool isPickedUp;
     public bool isColliding;
@@ -40,10 +41,14 @@ public class PickUp : MonoBehaviour
         // TODO: osuu heittäessä aina ensin heittävään pelaajaan, ei kuulu osua!
         foreach (var hit in hits)
         {
-            print(hit.transform.gameObject.tag);
+            //print(hit.transform.gameObject.tag);
 
             // If box is throwed and hits another player
-            if (hit.transform.gameObject.layer == 10 && isThrowed==true && hit.gameObject.tag != "Hands") // Layer 10 = player
+            if (hit.transform.gameObject.layer == 10 && isThrowed == true && hit.transform.gameObject != pickUpPlayer
+                && hit.transform.gameObject != pickUpPlayer.transform.GetChild(0).gameObject
+                && hit.transform.gameObject != pickUpPlayer.transform.GetChild(1).gameObject
+                && hit.transform.gameObject != pickUpPlayer.transform.GetChild(2).gameObject
+                && hit.transform.gameObject != pickUpPlayer.transform.GetChild(2).GetChild(0).gameObject) // Layer 10 = player
             {
                 boxHitsPlayer = true;
                 isThrowed = false;
@@ -68,13 +73,16 @@ public class PickUp : MonoBehaviour
 
     private void OnBoxHitsPlayer()
     {
-        
+        gameObject.SetActive(false);
+        Destroy(this);
     }
 
     private void OnBoxHitsGround()
     {
         // Freezes box when it hits the ground
         this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+        gameObject.SetActive(false);
+        Destroy(this);
     }
 
     private void OnDrawGizmosSelected()
@@ -82,6 +90,11 @@ public class PickUp : MonoBehaviour
         Gizmos.color = Color.red;
         //Debug.DrawLine(origin, origin * currentHitDistance);
         //Gizmos.DrawWireSphere(origin * currentHitDistance, sphereRadius);
+    }
+
+    public void ParentPlayer(GameObject player)
+    {
+        pickUpPlayer = player;
     }
 
 }

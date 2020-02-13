@@ -91,6 +91,7 @@ public class Player : MonoBehaviour
         if (isColliding)
         {
             pickUpObject = collidingObject;
+            pickUpObject.GetComponent<PickUp>().ParentPlayer(this.gameObject);
             pickUpObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             pickUpObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             pickUpObject.transform.position = Hands.transform.position;
