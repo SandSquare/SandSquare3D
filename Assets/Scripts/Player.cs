@@ -48,17 +48,17 @@ public class Player : MonoBehaviour
         if (handsEmpty && isColliding)
         {
             PickThrowable();
-            isPickedUp = true;
+            pickUpObject.GetComponent<PickUp>().isPickedUp = true;
             handsEmpty = false;
         }
-        else if (isPickedUp && !handsEmpty)
+        else if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
         {
             Throw();
-            isPickedUp = false;
+            pickUpObject.GetComponent<PickUp>().isPickedUp = false;
             handsEmpty = true;
         }
 
-        Debug.Log($"handsempty {handsEmpty} - ispickedup {isPickedUp}");
+        Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
     }
 
     void OnTriggerStay(Collider other)
