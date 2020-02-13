@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public GameObject tempParent;
     public bool isColliding;
     public bool isJumping = false;
-    public bool isPickedUp;
+    //public bool isPickedUp;
     private bool handsEmpty = true;
 
     private float throwForce = 300f;
@@ -29,17 +29,17 @@ public class Player : MonoBehaviour
             if (handsEmpty && isColliding)
             {
                 PickThrowable();
-                isPickedUp = true;
+                pickUpObject.GetComponent<PickUp>().isPickedUp = true;
                 handsEmpty = false;
             }
-            else if (isPickedUp && !handsEmpty)
+            else if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
             {
                 Throw();
-                isPickedUp = false;
+                pickUpObject.GetComponent<PickUp>().isPickedUp = false;
                 handsEmpty = true;
             }
 
-            Debug.Log($"handsempty {handsEmpty} - ispickedup {isPickedUp}");
+            Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
         }
     }
 
@@ -48,17 +48,17 @@ public class Player : MonoBehaviour
         if (handsEmpty && isColliding)
         {
             PickThrowable();
-            isPickedUp = true;
+            pickUpObject.GetComponent<PickUp>().isPickedUp = true;
             handsEmpty = false;
         }
-        else if (isPickedUp && !handsEmpty)
+        else if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
         {
             Throw();
-            isPickedUp = false;
+            pickUpObject.GetComponent<PickUp>().isPickedUp = false;
             handsEmpty = true;
         }
 
-        Debug.Log($"handsempty {handsEmpty} - ispickedup {isPickedUp}");
+        Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
     }
 
     void OnTriggerStay(Collider other)
@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
     //    {
     //        handsEmpty = true;
     //    }
-    //}w
+    //}
 
     public void PickThrowable()
     {
@@ -92,7 +92,7 @@ public class Player : MonoBehaviour
             pickUpObject.transform.position = Hands.transform.position;
             pickUpObject.transform.rotation = Hands.transform.rotation;
             pickUpObject.transform.parent = tempParent.transform;
-            isPickedUp = true;
+            pickUpObject.GetComponent<PickUp>().isPickedUp = true;
             isColliding = false;
             EventManager.TriggerEvent("Pickup");
         }
@@ -104,7 +104,8 @@ public class Player : MonoBehaviour
         {
             pickUpObject.transform.parent = null;
             pickUpObject.GetComponent<Rigidbody>().useGravity = true;
-            isPickedUp = false;
+            pickUpObject.GetComponent<PickUp>().isPickedUp = false;
+            pickUpObject.GetComponent<PickUp>().isThrowed = true;
             isColliding = false;
             pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForce);
             pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForce / 2));
