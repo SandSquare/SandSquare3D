@@ -32,34 +32,38 @@ public class Player : MonoBehaviour
                 pickUpObject.GetComponent<PickUp>().isPickedUp = true;
                 handsEmpty = false;
             }
-            else if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
+            else if (pickUpObject != null)  
             {
-                Throw();
-                pickUpObject.GetComponent<PickUp>().isPickedUp = false;
-                handsEmpty = true;
+                if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
+                {
+                    Throw();
+                    pickUpObject.GetComponent<PickUp>().isPickedUp = false;
+                    handsEmpty = true;
+                }
+                
             }
 
-            Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
+            //Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
         }
     }
 
-    public void HandlePickUp()
-    {
-        if (handsEmpty && isColliding)
-        {
-            PickThrowable();
-            pickUpObject.GetComponent<PickUp>().isPickedUp = true;
-            handsEmpty = false;
-        }
-        else if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
-        {
-            Throw();
-            pickUpObject.GetComponent<PickUp>().isPickedUp = false;
-            handsEmpty = true;
-        }
+    //public void HandlePickUp()
+    //{
+    //    if (handsEmpty && isColliding)
+    //    {
+    //        PickThrowable();
+    //        pickUpObject.GetComponent<PickUp>().isPickedUp = true;
+    //        handsEmpty = false;
+    //    }
+    //    else if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
+    //    {
+    //        Throw();
+    //        pickUpObject.GetComponent<PickUp>().isPickedUp = false;
+    //        handsEmpty = true;
+    //    }
 
-        Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
-    }
+    //    Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
+    //}
 
     void OnTriggerStay(Collider other)
     {
@@ -94,7 +98,7 @@ public class Player : MonoBehaviour
             pickUpObject.transform.parent = tempParent.transform;
             pickUpObject.GetComponent<PickUp>().isPickedUp = true;
             isColliding = false;
-            EventManager.TriggerEvent("Pickup");
+            //EventManager.TriggerEvent("Pickup");
         }
     }
 
