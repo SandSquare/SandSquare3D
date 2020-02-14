@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: 8aa33ae0549b7cb44987e0a793c347c7
+guid: 1e599cb1d67db874eb836f3136d81c6d
 ModelImporter:
   serializedVersion: 26
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Stone Slate Wall
-    second: {fileID: 2100000, guid: 832d306293d19cf4bb023f01561c44a5, type: 2}
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
