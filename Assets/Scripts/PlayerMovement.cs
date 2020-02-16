@@ -16,6 +16,9 @@ namespace Game
         [SerializeField, Range(0, 50)]
         private float airControlSpeed = 6.0f;
 
+        [SerializeField, Range(0, 1)]
+        private float airControlPercent = 0.1f;
+
         [SerializeField, Range(0, 50)]
         private float jumpSpeed = 8.0f;
 
@@ -39,6 +42,8 @@ namespace Game
             get => velocity;
             set => velocity = value;
         }
+
+        private Vector3 lastFrameVelocity;
 
         public bool IsGrounded { get; private set; }
 
@@ -67,7 +72,6 @@ namespace Game
 
         private void Start()
         {
-            //gameInput = FindObjectOfType<GameInput>();
             characterController = GetComponent<CharacterController>();
 
             inputs = GetComponent<PlayerInput>();
@@ -118,9 +122,11 @@ namespace Game
             {
                 IsGrounded = false;
 
-                Vector3 airVelocity = new Vector3(inputs.MoveInput.x, transform.position.y, inputs.MoveInput.y) * airControlSpeed;
+                Vector3 airVelocity = new Vector3(inputs.MoveInput.x * airControlSpeed, velocity.y, inputs.MoveInput.y * airControlSpeed);
 
-                velocity = Vector3.Lerp(targetMovement, airVelocity, 0.3f);
+                Debug.Log($"lfv: {lastFrameVelocity} airvel: {airVelocity}  velocity: { velocity}");
+
+                velocity = Vector3.Lerp(lastFrameVelocity, airVelocity, airControlPercent);
 
                 ////if (velocity.sqrMagnitude < runSpeed * runSpeed)
                 //velocity.x += (targetMovement.x * speed) * Time.deltaTime;
@@ -135,6 +141,8 @@ namespace Game
             targetRotation.x = transform.position.x + velocity.x * 100;
             targetRotation.z = transform.position.z + velocity.z * 100;
             targetRotation.y = transform.position.y;
+
+            lastFrameVelocity = velocity;
 
             if(input != Vector2.zero)
             {

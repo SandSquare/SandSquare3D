@@ -233,7 +233,6 @@ MonoBehaviour:
   tempParent: {fileID: 0}
   isColliding: 0
   isJumping: 0
-  isPickedUp: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,21 +475,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6986460251037607379, guid: 71052dcbb98a8614388e51e4783b3475,
-        type: 3}
-      propertyPath: gravityMultiplier
-      value: 12.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6986460251037607379, guid: 71052dcbb98a8614388e51e4783b3475,
-        type: 3}
-      propertyPath: airControlSpeed
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6986460251037607379, guid: 71052dcbb98a8614388e51e4783b3475,
-        type: 3}
-      propertyPath: jumpSpeed
-      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6986460251037607382, guid: 71052dcbb98a8614388e51e4783b3475,
         type: 3}
