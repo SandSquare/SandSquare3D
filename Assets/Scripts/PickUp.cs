@@ -25,6 +25,10 @@ public class PickUp : MonoBehaviour
 
     private float currentHitDistance;
 
+    //Damage inflicted to player
+    [SerializeField]
+    private int damage = 1;
+
     public void Start()
     {
         GetComponent<Rigidbody>().useGravity = false;
@@ -55,6 +59,8 @@ public class PickUp : MonoBehaviour
                 OnBoxHitsPlayer();
                 //print("BOX HITS PLAYER");
                 Debug.Log($"BOX HITS {hit.transform.gameObject}");
+                //Player handles the damage it takes
+                hit.transform.gameObject.GetComponent<Player>().TakeDamage(damage);
                 break;
                 
             }

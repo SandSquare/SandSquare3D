@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +9,7 @@ public class Player : MonoBehaviour
     private PlayerInput inputs;
     private GameObject pickUpObject;
     private GameObject collidingObject;
+    private Health health;
     public Transform Hands;
     public GameObject tempParent;
     public bool isColliding;
@@ -20,11 +22,12 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         inputs = GetComponent<PlayerInput>();
+        health = GetComponent<Health>();
     }
 
     private void Update()
     {
-        if (inputs.ActionInput.triggered)
+        if (inputs != null && inputs.ActionInput.triggered)
         {
             if (handsEmpty && isColliding)
             {
@@ -72,6 +75,23 @@ public class Player : MonoBehaviour
             isColliding = true;
             collidingObject = other.gameObject;
         }
+    }
+
+    //Reference to collidingObject is removed when player exits it's collider
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Throwable")
+        {
+            isColliding = false;
+            collidingObject = null;
+        }
+    }
+
+    //The damage player takes is handled
+    public void TakeDamage(int amount)
+    {
+        EventManager.TriggerEvent("Damage");
+        health.DecreaseHealth(amount);
     }
 
     //public void OnPickUp(InputAction.CallbackContext context)
