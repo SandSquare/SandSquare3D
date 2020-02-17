@@ -104,7 +104,7 @@ namespace Game
             }               
 
             // Apply movement only when on (or near) ground and player isn't moving upwards
-            if ((characterController.isGrounded || didHit) && velocity.y <= 0f)
+            if ((characterController.isGrounded && didHit) && velocity.y <= 0f)
             {
                 IsGrounded = true;
                 velocity.x = targetMovement.x * speed;

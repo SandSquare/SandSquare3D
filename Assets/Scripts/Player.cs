@@ -45,7 +45,6 @@ public class Player : MonoBehaviour
     {
         if (playerState == Types.PlayerState.Jab)
         {
-
             time += Time.deltaTime;
             if (time > jabTime)
             {
