@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
     public GameObject tempParent;
     public bool isColliding;
     public bool isJumping = false;
-    //public bool isPickedUp;
     private bool handsEmpty = true;
 
     private float throwForce = 300f;
