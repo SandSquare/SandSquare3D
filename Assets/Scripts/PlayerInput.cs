@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
 {
     private PlayerControls controls;
+    private Player player;
 
     public Vector2 MoveInput
     {
@@ -36,6 +37,7 @@ public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
         controls = new PlayerControls();        
         controls.Enable();
         controls.Player.SetCallbacks(this);
+        player = GetComponent<Player>();
     }
 
     private void OnEnable()
@@ -55,6 +57,9 @@ public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
-        //GetComponent<Player>().HandlePickUp();
+        if (context.performed)
+        {
+            player.HandlePickUp();
+        }
     }
 }

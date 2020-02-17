@@ -79,14 +79,16 @@ public class PickUp : MonoBehaviour
 
     private void OnBoxHitsPlayer()
     {
+        pickUpPlayer.GetComponent<Player>().RemoveChild();
         gameObject.SetActive(false);
         Destroy(this);
     }
-
+    
     private void OnBoxHitsGround()
     {
         // Freezes box when it hits the ground
         this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+        pickUpPlayer.GetComponent<Player>().RemoveChild();
         gameObject.SetActive(false);
         Destroy(this);
     }
