@@ -25,28 +25,46 @@ public class Player : MonoBehaviour
         health = GetComponent<Health>();
     }
 
-    private void Update()
-    {
-        if (inputs != null && inputs.ActionInput.triggered)
-        {
-            if (handsEmpty && isColliding)
-            {
-                PickThrowable();
-                pickUpObject.GetComponent<PickUp>().isPickedUp = true;
-                handsEmpty = false;
-            }
-            else if (pickUpObject != null)  
-            {
-                if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
-                {
-                    Throw();
-                    pickUpObject.GetComponent<PickUp>().isPickedUp = false;
-                    handsEmpty = true;
-                }
+    //private void Update()
+    //{
+    //    if (inputs != null && inputs.ActionInput.triggered)
+    //    {
+    //        if (handsEmpty && isColliding)
+    //        {
+    //            PickThrowable();
+    //            pickUpObject.GetComponent<PickUp>().isPickedUp = true;
+    //            handsEmpty = false;
+    //        }
+    //        else if (pickUpObject != null && pickUpObject.GetComponent<PickUp>().isPickedUp)  
+    //        {
+    //            if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
+    //            {
+    //                Throw();
+    //                pickUpObject.GetComponent<PickUp>().isPickedUp = false;
+    //                handsEmpty = true;
+    //            }
                 
-            }
+    //        }
+    //        //Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
+    //    }
+    //}
 
-            //Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
+    public void HandlePickUp()
+    {
+        if (handsEmpty && isColliding)
+        {
+            PickThrowable();
+            pickUpObject.GetComponent<PickUp>().isPickedUp = true;
+            handsEmpty = false;
+        }
+        else if (pickUpObject != null && pickUpObject.GetComponent<PickUp>().isPickedUp)
+        {
+            if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
+            {
+                Throw();
+                pickUpObject.GetComponent<PickUp>().isPickedUp = false;
+                handsEmpty = true;
+            }
         }
     }
 
@@ -135,5 +153,10 @@ public class Player : MonoBehaviour
             pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForce);
             pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForce / 2));
         }
+    }
+
+    public void RemoveChild()
+    {
+        pickUpObject = null;
     }
 }
