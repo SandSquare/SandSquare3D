@@ -28,6 +28,14 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Jab",
+                    "type": "Button",
+                    "id": "6bf0beda-cc63-470e-afba-9bb387ca9073",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -99,6 +107,17 @@
                 },
                 {
                     "name": "",
+                    "id": "a89edb80-5860-47c8-9b9b-407c79b7d8fb",
+                    "path": "<Joystick>/stick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8b024dd4-03b9-4d73-93bb-b0a86a6a8f2d",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
@@ -121,12 +140,45 @@
                 },
                 {
                     "name": "",
+                    "id": "0c73b6a8-d83b-46c2-a06d-250fab168b02",
+                    "path": "<HID::Microsoft® Microsoft® SideWinder® Game Pad USB>/button3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "bd47fc40-7827-4b82-8fd5-6d35d71eb890",
                     "path": "<Keyboard>/m",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "PickUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6c9bafb4-a4de-48f1-9669-27a9b0afcf2a",
+                    "path": "<HID::Microsoft® Microsoft® SideWinder® Game Pad USB>/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PickUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "660b862a-d81f-415a-b009-1d36145b458f",
+                    "path": "<HID::Microsoft® Microsoft® SideWinder® Game Pad USB>/button2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jab",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

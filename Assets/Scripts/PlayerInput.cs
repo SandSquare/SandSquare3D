@@ -45,15 +45,14 @@ public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
         //controls.Player.PickUp.performed += OnPickUp;
     }
 
-    public void OnJump(InputAction.CallbackContext context)
-    {
-
-    }
-
     public void OnMove(InputAction.CallbackContext context)
     {
-
     }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+    }
+
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
@@ -61,5 +60,10 @@ public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
         {
             player.HandlePickUp();
         }
+    }
+
+    public void OnJab(InputAction.CallbackContext context)
+    {
+        player.HandleJab();
     }
 }

@@ -17,37 +17,45 @@ public class Player : MonoBehaviour
     //public bool isPickedUp;
     private bool handsEmpty = true;
 
+    [SerializeField]
     private float throwForce = 300f;
+
+    [SerializeField]
+    private SphereCollider jabCollider;
+    [SerializeField]
+    private float jabTime = 2;
+    private float time = 0;
+
+    [SerializeField]
+    private Types.PlayerState playerState;
 
     private void Awake()
     {
         inputs = GetComponent<PlayerInput>();
         health = GetComponent<Health>();
+        jabCollider.gameObject.SetActive(false);
     }
 
-    //private void Update()
-    //{
-    //    if (inputs != null && inputs.ActionInput.triggered)
-    //    {
-    //        if (handsEmpty && isColliding)
-    //        {
-    //            PickThrowable();
-    //            pickUpObject.GetComponent<PickUp>().isPickedUp = true;
-    //            handsEmpty = false;
-    //        }
-    //        else if (pickUpObject != null && pickUpObject.GetComponent<PickUp>().isPickedUp)  
-    //        {
-    //            if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
-    //            {
-    //                Throw();
-    //                pickUpObject.GetComponent<PickUp>().isPickedUp = false;
-    //                handsEmpty = true;
-    //            }
-                
-    //        }
-    //        //Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
-    //    }
-    //}
+    public void HandleJab()
+    {
+        jabCollider.gameObject.SetActive(true);
+        playerState = Types.PlayerState.Jab;
+    }
+
+    private void Update()
+    {
+        if (playerState == Types.PlayerState.Jab)
+        {
+
+            time += Time.deltaTime;
+            if (time > jabTime)
+            {
+                time = 0;
+                jabCollider.gameObject.SetActive(false);
+                playerState = Types.PlayerState.Idle;
+            }
+        }
+    }
 
     public void HandlePickUp()
     {
@@ -66,25 +74,9 @@ public class Player : MonoBehaviour
                 handsEmpty = true;
             }
         }
+        //Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
     }
 
-    //public void HandlePickUp()
-    //{
-    //    if (handsEmpty && isColliding)
-    //    {
-    //        PickThrowable();
-    //        pickUpObject.GetComponent<PickUp>().isPickedUp = true;
-    //        handsEmpty = false;
-    //    }
-    //    else if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
-    //    {
-    //        Throw();
-    //        pickUpObject.GetComponent<PickUp>().isPickedUp = false;
-    //        handsEmpty = true;
-    //    }
-
-    //    Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
-    //}
 
     void OnTriggerStay(Collider other)
     {

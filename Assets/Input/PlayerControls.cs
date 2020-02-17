@@ -41,6 +41,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Jab"",
+                    ""type"": ""Button"",
+                    ""id"": ""6bf0beda-cc63-470e-afba-9bb387ca9073"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -112,6 +120,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""a89edb80-5860-47c8-9b9b-407c79b7d8fb"",
+                    ""path"": ""<Joystick>/stick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8b024dd4-03b9-4d73-93bb-b0a86a6a8f2d"",
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
@@ -134,12 +153,45 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""0c73b6a8-d83b-46c2-a06d-250fab168b02"",
+                    ""path"": ""<HID::Microsoft® Microsoft® SideWinder® Game Pad USB>/button3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""bd47fc40-7827-4b82-8fd5-6d35d71eb890"",
                     ""path"": ""<Keyboard>/m"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PickUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c9bafb4-a4de-48f1-9669-27a9b0afcf2a"",
+                    ""path"": ""<HID::Microsoft® Microsoft® SideWinder® Game Pad USB>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PickUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""660b862a-d81f-415a-b009-1d36145b458f"",
+                    ""path"": ""<HID::Microsoft® Microsoft® SideWinder® Game Pad USB>/button2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -153,6 +205,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_PickUp = m_Player.FindAction("PickUp", throwIfNotFound: true);
+        m_Player_Jab = m_Player.FindAction("Jab", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -205,6 +258,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_PickUp;
+    private readonly InputAction m_Player_Jab;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -212,6 +266,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @PickUp => m_Wrapper.m_Player_PickUp;
+        public InputAction @Jab => m_Wrapper.m_Player_Jab;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -230,6 +285,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @PickUp.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickUp;
                 @PickUp.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickUp;
                 @PickUp.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickUp;
+                @Jab.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJab;
+                @Jab.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJab;
+                @Jab.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJab;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -243,6 +301,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @PickUp.started += instance.OnPickUp;
                 @PickUp.performed += instance.OnPickUp;
                 @PickUp.canceled += instance.OnPickUp;
+                @Jab.started += instance.OnJab;
+                @Jab.performed += instance.OnJab;
+                @Jab.canceled += instance.OnJab;
             }
         }
     }
@@ -252,5 +313,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnPickUp(InputAction.CallbackContext context);
+        void OnJab(InputAction.CallbackContext context);
     }
 }
