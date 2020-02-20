@@ -16,8 +16,10 @@ public class Player : MonoBehaviour
     public bool isJumping = false;
     //public bool isPickedUp;
     private bool handsEmpty = true;
-
-    private float throwForce = 300f;
+    [SerializeField]
+    private float throwForceX = 300f;
+    [SerializeField]
+    private float throwForceY = 150f;
 
     private void Awake()
     {
@@ -131,8 +133,8 @@ public class Player : MonoBehaviour
             pickUpObject.GetComponent<PickUp>().isPickedUp = false;
             pickUpObject.GetComponent<PickUp>().isThrowed = true;
             isColliding = false;
-            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForce);
-            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForce / 2));
+            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForceX);
+            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForceY));
             pickUpObject = null;
         }
     }
