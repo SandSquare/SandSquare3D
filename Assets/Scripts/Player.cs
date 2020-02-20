@@ -40,7 +40,6 @@ public class Player : MonoBehaviour
                 if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
                 {
                     Throw();
-                    pickUpObject.GetComponent<PickUp>().isPickedUp = false;
                     handsEmpty = true;
                 }
                 
@@ -134,6 +133,7 @@ public class Player : MonoBehaviour
             isColliding = false;
             pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForce);
             pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForce / 2));
+            pickUpObject = null;
         }
     }
 }
