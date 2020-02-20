@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     public bool isColliding;
     public bool isJumping = false;
     private bool handsEmpty = true;
+
     [SerializeField]
     private float throwForceX = 300f;
     [SerializeField]
@@ -103,18 +104,6 @@ public class Player : MonoBehaviour
         EventManager.TriggerEvent("Damage");
         health.DecreaseHealth(amount);
     }
-
-    //public void OnPickUp(InputAction.CallbackContext context)
-    //{
-    //    if (context.phase == InputActionPhase.Performed && handsEmpty && isColliding)
-    //    {
-    //        handsEmpty = false;
-    //    }
-    //    else if (context.phase == InputActionPhase.Performed && !handsEmpty)
-    //    {
-    //        handsEmpty = true;
-    //    }
-    //}
 
     public void PickThrowable()
     {

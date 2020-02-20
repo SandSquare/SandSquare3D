@@ -9,5 +9,14 @@ public static class Types
     {
         Idle,
         Jab,
+        Hold,
     }
+
+    public enum Movement
+    {
+        Stunned,
+        Moving,
+        Idle,
+    }
+ 
 }
