@@ -15,9 +15,12 @@ public class Player : MonoBehaviour
     public bool isColliding;
     public bool isJumping = false;
     private bool handsEmpty = true;
-
     [SerializeField]
-    private float throwForce = 300f;
+    private float throwForceX = 300f;
+    [SerializeField]
+    private float throwForceY = 150f;
+
+
 
     [SerializeField]
     private SphereCollider jabCollider;
@@ -68,7 +71,6 @@ public class Player : MonoBehaviour
             if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
             {
                 Throw();
-                pickUpObject.GetComponent<PickUp>().isPickedUp = false;
                 handsEmpty = true;
             }
         }
@@ -140,8 +142,9 @@ public class Player : MonoBehaviour
             pickUpObject.GetComponent<PickUp>().isPickedUp = false;
             pickUpObject.GetComponent<PickUp>().isThrowed = true;
             isColliding = false;
-            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForce);
-            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForce / 2));
+            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForceX);
+            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForceY));
+            pickUpObject = null;
         }
     }
 

@@ -65,7 +65,7 @@ public class PickUp : MonoBehaviour
                 
             }
             // If box is throwed and hits ground
-            else if (hit.transform.gameObject.layer == 8 && isThrowed==true) // Layer 10 = ground
+            else if (hit.transform.gameObject.layer == 8 && isThrowed==true) // Layer 8 = ground
             {
                 boxHitsGround = true;
                 isThrowed = false;

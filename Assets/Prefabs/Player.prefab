@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6033623189507959232}
   - component: {fileID: 2759093789785306431}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: guide
   m_TagString: Hands
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7955640768645459080}
   - component: {fileID: 5718064025473651240}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Jab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -316,7 +316,8 @@ MonoBehaviour:
   tempParent: {fileID: 2488346245898799513}
   isColliding: 0
   isJumping: 0
-  throwForce: 300
+  throwForceX: 700
+  throwForceY: 150
   jabCollider: {fileID: 5718064025473651240}
   jabTime: 2
   playerState: 0
@@ -334,7 +335,7 @@ GameObject:
   - component: {fileID: 6986460251250227677}
   m_Layer: 0
   m_Name: Left Hand
-  m_TagString: Untagged
+  m_TagString: Hands
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -518,7 +519,7 @@ GameObject:
   - component: {fileID: 6986460251502248232}
   m_Layer: 0
   m_Name: Right hand
-  m_TagString: Untagged
+  m_TagString: Hands
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -592,7 +593,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6986460251502248234}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
