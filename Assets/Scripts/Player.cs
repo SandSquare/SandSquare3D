@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     private PlayerInput inputs;
     private GameObject pickUpObject;
     private GameObject collidingObject;
-    private Health health;
+    //private Health health;
     public Transform Hands;
     public GameObject tempParent;
     public bool isColliding;
@@ -32,10 +32,21 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Types.PlayerState playerState;
 
+    public IHealth Health
+    {
+        get;
+        private set;
+    }
+
     private void Awake()
     {
         inputs = GetComponent<PlayerInput>();
-        health = GetComponent<Health>();
+        //health = GetComponent<Health>();
+        Health = GetComponent<IHealth>();
+        if (Health == null)
+        {
+            Debug.LogError($"Health component could not be found from {this.name}");
+        }
         jabCollider.gameObject.SetActive(false);
     }
 
@@ -56,6 +67,11 @@ public class Player : MonoBehaviour
                 jabCollider.gameObject.SetActive(false);
                 playerState = Types.PlayerState.Idle;
             }
+        }
+
+        if (Health.CurrentHealth <= Health.MinHealth)
+        {
+           Die();
         }
     }
 
@@ -102,7 +118,7 @@ public class Player : MonoBehaviour
     public void TakeDamage(int amount)
     {
         EventManager.TriggerEvent("Damage");
-        health.DecreaseHealth(amount);
+        Health.DecreaseHealth(amount);
     }
 
     public void PickThrowable()
@@ -140,5 +156,10 @@ public class Player : MonoBehaviour
     public void RemoveChild()
     {
         pickUpObject = null;
+    }
+
+    private void Die()
+    {
+        gameObject.SetActive(false);
     }
 }
