@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// public enum types that can be referenced from anywhere
-public static class Types
+// Get access to enum states by 'using Types;'
+namespace Types
 {
     public enum PlayerState
     {
@@ -18,5 +18,12 @@ public static class Types
         Moving,
         Idle,
     }
- 
+
+    public enum GameState
+    {
+        MainMenu,
+        JoinGame,
+        Game
+    }
+
 }

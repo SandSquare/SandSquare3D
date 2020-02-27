@@ -124,7 +124,7 @@ namespace Game
 
                 Vector3 airVelocity = new Vector3(inputs.MoveInput.x * airControlSpeed, velocity.y, inputs.MoveInput.y * airControlSpeed);
 
-                Debug.Log($"lfv: {lastFrameVelocity} airvel: {airVelocity}  velocity: { velocity}");
+                //Debug.Log($"lfv: {lastFrameVelocity} airvel: {airVelocity}  velocity: { velocity}");
 
                 velocity = Vector3.Lerp(lastFrameVelocity, airVelocity, airControlPercent);
 

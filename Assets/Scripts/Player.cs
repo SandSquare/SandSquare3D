@@ -52,6 +52,7 @@ public class Player : MonoBehaviour
 
     public void HandleJab()
     {
+        Debug.Log("Jab handled");
         jabCollider.gameObject.SetActive(true);
         playerState = Types.PlayerState.Jab;
     }
@@ -77,6 +78,7 @@ public class Player : MonoBehaviour
 
     public void HandlePickUp()
     {
+        Debug.Log("Pickup handled");
         if (handsEmpty && isColliding)
         {
             PickThrowable();
