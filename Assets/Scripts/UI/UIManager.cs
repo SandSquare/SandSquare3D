@@ -9,4 +9,17 @@ public class UIManager : MonoBehaviour
     {
         //SceneManager.LoadScene("PlayerJoin");
     }
+
+    public void LoadGameScene()
+    {
+        SceneManager.LoadScene("Game");
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("Quitting game...");
+        Application.Quit();
+    }
+
+    
 }
