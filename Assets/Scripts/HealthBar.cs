@@ -18,6 +18,7 @@ public class HealthBar : MonoBehaviour
     private Image image;
     private float maxWidth;
     private Gradient gradient;
+    Quaternion iniRot;
 
     public Player Owner
     {
@@ -28,7 +29,6 @@ public class HealthBar : MonoBehaviour
     private void Awake()
     {
         image = GetComponent<Image>();
-        // Ei periydy MonoBehaviour:sta, voidaan luoda new:llä
         gradient = new Gradient();
 
         // Gradientin värit (alku- ja loppuväri)
@@ -38,8 +38,8 @@ public class HealthBar : MonoBehaviour
 
         // Alustetaan alkuarvot
         colorKeys[0].color = emptyColor;
-        colorKeys[0].time = 0; // Tai prosenttiosuus hit pointeista
-        alphaKeys[0].alpha = 1; // Läpinäkymätön
+        colorKeys[0].time = 0;
+        alphaKeys[0].alpha = 1;
         alphaKeys[0].time = 0;
 
         // Loppuarvot
@@ -50,12 +50,13 @@ public class HealthBar : MonoBehaviour
 
         gradient.SetKeys(colorKeys, alphaKeys);
 
-        // Maksimileveys on kuvan koko olion alustushetkellä
-        // Luetaan kuvan rectTransformilta (sizeDelta kertoo kuvan koon)
         maxWidth = image.rectTransform.sizeDelta.x;
 
-        // Etsii UnitBase-tyyppisen olion tämän olion vanhemmista
         Owner = this.GetComponentInParent<Player>();
+        //transform.up = transform.up;
+        this.GetComponentInParent<Canvas>().gameObject.transform.up = transform.up;
+        iniRot = transform.rotation;
+        
     }
 
     private void Update()
@@ -63,22 +64,20 @@ public class HealthBar : MonoBehaviour
         float healthPercent =
             Owner.Health.CurrentHealth / (float)Owner.Health.MaxHealth;
 
-        // Otetaan nykyinen koko talteen, jottemme muuta health barin
-        // korkeutta.
         Vector2 size = image.rectTransform.sizeDelta;
         size.x = maxWidth * healthPercent;
         image.rectTransform.sizeDelta = size;
 
-        // Asettaa värin Gradient-olion avulla
-        //Color color = gradient.Evaluate(healthPercent);
-        //image.color = color;
-
-        // Väri voidaan myös laskea itse eikä silloin tarvita
-        // Gradient-oliota apuna
         Color fullPortion = healthPercent * fullColor;
         Color emptyPortion = (1 - healthPercent) * emptyColor;
         Color currentColor = fullPortion + emptyPortion;
         currentColor.a = alpha;
         image.color = currentColor;
+    }
+
+    private void LateUpdate()
+    {
+         //transform.rotation = iniRot;
+        this.GetComponentInParent<Canvas>().gameObject.transform.rotation = iniRot;
     }
 }
