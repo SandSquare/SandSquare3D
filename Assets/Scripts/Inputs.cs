@@ -4,33 +4,28 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
+public class Inputs : MonoBehaviour, PlayerControls.IPlayerActions
 {
     private PlayerControls controls;
+    private PlayerInput playerInput;
     private Player player;
 
     public Vector2 MoveInput
     {
-        get
-        {
-            return controls.Player.Move.ReadValue<Vector2>();
-        }
+        get;
+        private set;
     }
 
-    public InputAction JumpInput
+    public bool JumpInput
     {
-        get
-        {
-            return controls.Player.Jump;
-        }
+        get;
+        private set;
     }
 
-    public InputAction ActionInput
+    public bool ActionInput
     {
-        get
-        {
-            return controls.Player.PickUp;
-        }
+        get;
+        private set;
     }
 
     private void Awake()
@@ -39,6 +34,8 @@ public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
         controls.Enable();
         controls.Player.SetCallbacks(this);
         player = GetComponent<Player>();
+
+        //playerInput = GetComponent<PlayerInput>();
     }
 
     private void OnEnable()
@@ -52,15 +49,13 @@ public class PlayerInput : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        MoveInput = context.ReadValue<Vector2>();
+        
     }
-
-    public void OnMove(InputValue value)
-    {
-    }
-
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        JumpInput = context.performed;
     }
 
 

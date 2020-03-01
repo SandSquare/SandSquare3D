@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    private PlayerInput inputs;
+    private Inputs inputs;
     private GameObject pickUpObject;
     private GameObject collidingObject;
     //private Health health;
@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        inputs = GetComponent<PlayerInput>();
+        inputs = GetComponent<Inputs>();
         //health = GetComponent<Health>();
         Health = GetComponent<IHealth>();
         if (Health == null)
