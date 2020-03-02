@@ -1,79 +1,167 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour, PlayerControls.IPlayerActions
+public class Player : MonoBehaviour
 {
-    private PlayerControls controls;
-    public PickUp pickUpObject;
+    private Inputs inputs;
+    private GameObject pickUpObject;
+    private GameObject collidingObject;
+    //private Health health;
+    public Transform Hands;
+    public GameObject tempParent;
+    public bool isColliding;
     public bool isJumping = false;
-    public bool isPickedUp = false;
+    private bool handsEmpty = true;
+
+    [SerializeField]
+    private float throwForceX = 300f;
+    [SerializeField]
+    private float throwForceY = 150f;
+
+
+
+    [SerializeField]
+    private SphereCollider jabCollider;
+    [SerializeField]
+    private float jabTime = 2;
+    private float time = 0;
+
+    [SerializeField]
+    private Types.PlayerState playerState;
+
+    public IHealth Health
+    {
+        get;
+        private set;
+    }
 
     private void Awake()
     {
-        controls = new PlayerControls();
-        controls.Player.SetCallbacks(this);
+        inputs = GetComponent<Inputs>();
+        //health = GetComponent<Health>();
+        Health = GetComponent<IHealth>();
+        if (Health == null)
+        {
+            Debug.LogError($"Health component could not be found from {this.name}");
+        }
+        jabCollider.gameObject.SetActive(false);
     }
+
+    public void HandleJab()
+    {
+        Debug.Log("Jab handled");
+        jabCollider.gameObject.SetActive(true);
+        playerState = Types.PlayerState.Jab;
+    }
+
     private void Update()
     {
-        if (isPickedUp)
+        if (playerState == Types.PlayerState.Jab)
         {
-            pickUpObject.PickThrowable();
+            time += Time.deltaTime;
+            if (time > jabTime)
+            {
+                time = 0;
+                jabCollider.gameObject.SetActive(false);
+                playerState = Types.PlayerState.Idle;
+            }
         }
-        else if (!isPickedUp)
+
+        if (Health.CurrentHealth <= Health.MinHealth)
         {
-            pickUpObject.Throw();
-        }
-    }
-
-    public void OnMove(InputAction.CallbackContext context)
-    {
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        controls.Enable();
-    }
-
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    Vector2 moveInput = controls.Player.Move.ReadValue<Vector2>();
-    //    transform.position += new Vector3(moveInput.x, 0, moveInput.y);
-    //    //GetComponent<Game.PlayerMovement>().GetInput(moveInput);
-    //    //Mover.Move(moveInput);
-    //}
-
-    public Vector2 GetInput()
-    {
-        Vector2 moveInput = controls.Player.Move.ReadValue<Vector2>();
-        return moveInput;
-    }
-
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed)
-        {
-            isJumping = true;
-        }
-        else if (context.phase == InputActionPhase.Canceled)
-        {
-            isJumping = false;
+           Die();
         }
     }
 
-    public void OnPickUp(InputAction.CallbackContext context)
+    public void HandlePickUp()
     {
-        if (context.phase == InputActionPhase.Performed)
+        Debug.Log("Pickup handled");
+        if (handsEmpty && isColliding)
         {
-            isPickedUp = true;
+            PickThrowable();
+            pickUpObject.GetComponent<PickUp>().isPickedUp = true;
+            handsEmpty = false;
         }
-        else if (context.phase == InputActionPhase.Canceled)
+        else if (pickUpObject != null && pickUpObject.GetComponent<PickUp>().isPickedUp)
         {
-            isPickedUp = false;
+            if (pickUpObject.GetComponent<PickUp>().isPickedUp && !handsEmpty)
+            {
+                Throw();
+                handsEmpty = true;
+            }
         }
+        //Debug.Log($"handsempty {handsEmpty} - ispickedup {pickUpObject.GetComponent<PickUp>().isPickedUp}");
+    }
+
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Throwable")
+        {
+            isColliding = true;
+            collidingObject = other.gameObject;
+        }
+    }
+
+    //Reference to collidingObject is removed when player exits it's collider
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Throwable")
+        {
+            isColliding = false;
+            collidingObject = null;
+        }
+    }
+
+    //The damage player takes is handled
+    public void TakeDamage(int amount)
+    {
+        EventManager.TriggerEvent("Damage");
+        Health.DecreaseHealth(amount);
+    }
+
+    public void PickThrowable()
+    {
+        if (isColliding)
+        {
+            pickUpObject = collidingObject;
+            pickUpObject.GetComponent<PickUp>().ParentPlayer(this.gameObject);
+            pickUpObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            pickUpObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            pickUpObject.transform.position = Hands.transform.position;
+            pickUpObject.transform.rotation = Hands.transform.rotation;
+            pickUpObject.transform.parent = tempParent.transform;
+            pickUpObject.GetComponent<PickUp>().isPickedUp = true;
+            isColliding = false;
+            //EventManager.TriggerEvent("Pickup");
+        }
+    }
+
+    public void Throw()
+    {
+        if (pickUpObject != null)
+        {
+            pickUpObject.transform.parent = null;
+            pickUpObject.GetComponent<Rigidbody>().useGravity = true;
+            pickUpObject.GetComponent<PickUp>().isPickedUp = false;
+            pickUpObject.GetComponent<PickUp>().isThrowed = true;
+            isColliding = false;
+            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.forward * throwForceX);
+            pickUpObject.GetComponent<Rigidbody>().AddForce(Hands.up * (throwForceY));
+            pickUpObject = null;
+        }
+    }
+
+    public void RemoveChild()
+    {
+        pickUpObject = null;
+    }
+
+    private void Die()
+    {
+        gameObject.SetActive(false);
     }
 }
