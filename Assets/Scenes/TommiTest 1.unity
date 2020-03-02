@@ -10641,6 +10641,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7079a17ac748ec445b33b1bbf19e7d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameUIManager: {fileID: 0}
+  gameState: 0
 --- !u!4 &466206951
 Transform:
   m_ObjectHideFlags: 0
@@ -11128,7 +11130,7 @@ PrefabInstance:
     - target: {fileID: 197658323711603927, guid: 71052dcbb98a8614388e51e4783b3475,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 197658323711603927, guid: 71052dcbb98a8614388e51e4783b3475,
         type: 3}
