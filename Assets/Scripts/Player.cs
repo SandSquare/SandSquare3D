@@ -6,10 +6,10 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    private PlayerInput inputs;
+    private Inputs inputs;
     private GameObject pickUpObject;
     private GameObject collidingObject;
-    private Health health;
+    //private Health health;
     public Transform Hands;
     public GameObject tempParent;
     public bool isColliding;
@@ -32,15 +32,27 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Types.PlayerState playerState;
 
+    public IHealth Health
+    {
+        get;
+        private set;
+    }
+
     private void Awake()
     {
-        inputs = GetComponent<PlayerInput>();
-        health = GetComponent<Health>();
+        inputs = GetComponent<Inputs>();
+        //health = GetComponent<Health>();
+        Health = GetComponent<IHealth>();
+        if (Health == null)
+        {
+            Debug.LogError($"Health component could not be found from {this.name}");
+        }
         jabCollider.gameObject.SetActive(false);
     }
 
     public void HandleJab()
     {
+        Debug.Log("Jab handled");
         jabCollider.gameObject.SetActive(true);
         playerState = Types.PlayerState.Jab;
     }
@@ -57,10 +69,16 @@ public class Player : MonoBehaviour
                 playerState = Types.PlayerState.Idle;
             }
         }
+
+        if (Health.CurrentHealth <= Health.MinHealth)
+        {
+           Die();
+        }
     }
 
     public void HandlePickUp()
     {
+        Debug.Log("Pickup handled");
         if (handsEmpty && isColliding)
         {
             PickThrowable();
@@ -102,7 +120,7 @@ public class Player : MonoBehaviour
     public void TakeDamage(int amount)
     {
         EventManager.TriggerEvent("Damage");
-        health.DecreaseHealth(amount);
+        Health.DecreaseHealth(amount);
     }
 
     public void PickThrowable()
@@ -140,5 +158,10 @@ public class Player : MonoBehaviour
     public void RemoveChild()
     {
         pickUpObject = null;
+    }
+
+    private void Die()
+    {
+        gameObject.SetActive(false);
     }
 }
